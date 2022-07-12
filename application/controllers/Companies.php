@@ -174,4 +174,33 @@
             return redirect ( base_url ( '/companies/index' ) );
         }
         
+        /**
+         * -----------------
+         * get shifts by company id
+         * via ajax request
+         * -----------------
+         */
+        
+        public function getCompanyShifts () {
+            $company_id = $this -> input -> get ( 'company_id', true );
+            
+            if ( isset( $company_id ) and $company_id > 0 ) {
+                $data[ 'shifts' ] = $this -> ShiftModel -> get_shifts_by_company ( $company_id );
+                $this -> load -> view ( 'shifts/company-shifts', $data );
+            }
+        }
+        
+        /**
+         * -----------------
+         * add more companies row
+         * via ajax request
+         * -----------------
+         */
+        
+        public function addMoreCompanies () {
+            $data[ 'row' ] = $this -> input -> get ( 'row', true );
+            $data[ 'companies' ] = $this -> CompanyModel -> get_companies ();
+            $this -> load -> view ( 'companies/add-more-companies', $data );
+        }
+        
     }

@@ -1,29 +1,29 @@
 <?php
     
-    class ShiftModel extends CI_Model {
+    class LeaveModel extends CI_Model {
         
         /**
          * -----------------
          * @param $info
          * @return mixed
-         * creates a new shift into the database
+         * creates a new leave into the database
          * -----------------
          */
         
         public function add ( $info ) {
-            $this -> db -> insert ( 'shifts', $info );
+            $this -> db -> insert ( 'leaves', $info );
             return $this -> db -> insert_id ();
         }
         
         /**
          * -----------------
          * @return mixed
-         * gets all shifts from the database
+         * gets all leaves from the database
          * -----------------
          */
         
-        public function get_shifts () {
-            $data = $this -> db -> get ( 'shifts' );
+        public function get_leaves () {
+            $data = $this -> db -> get ( 'leaves' );
             return $data -> result ();
         }
         
@@ -31,26 +31,13 @@
          * -----------------
          * @param $id
          * @return mixed
-         * get shift by id from the database
+         * get leave by id from the database
          * -----------------
          */
         
-        public function get_shift_by_id ( $id ) {
-            $data = $this -> db -> get_where ( 'shifts', array ( 'id' => $id ) );
+        public function get_leave_by_id ( $id ) {
+            $data = $this -> db -> get_where ( 'leaves', array ( 'id' => $id ) );
             return $data -> row ();
-        }
-        
-        /**
-         * -----------------
-         * @param $id
-         * @return mixed
-         * get shift by company id from the database
-         * -----------------
-         */
-        
-        public function get_shifts_by_company ( $id ) {
-            $data = $this -> db -> query ( "Select * from ems_shifts where id IN (Select shift_id from ems_company_shifts where company_id=$id)" );
-            return $data -> result ();
         }
         
         /**
@@ -58,12 +45,12 @@
          * @param $info
          * @param $where
          * @return mixed
-         * updates shift into the database
+         * updates leave into the database
          * -----------------
          */
         
         public function edit ( $info, $where ) {
-            $this -> db -> update ( 'shifts', $info, $where );
+            $this -> db -> update ( 'leaves', $info, $where );
             return $this -> db -> affected_rows ();
         }
         
@@ -71,12 +58,12 @@
          * -----------------
          * @param $id
          * @return mixed
-         * delete shift from the database
+         * delete leave from the database
          * -----------------
          */
         
         public function delete ( $id ) {
-            $this -> db -> delete ( 'shifts', array ( 'id' => $id ) );
+            $this -> db -> delete ( 'leaves', array ( 'id' => $id ) );
             return $this -> db -> affected_rows ();
         }
         

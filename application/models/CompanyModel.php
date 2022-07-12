@@ -47,12 +47,12 @@
          */
         
         public function get_companies_with_shifts () {
-            $sql = $this -> db -> get ( 'companies' );
+            $sql = $this -> db -> query ( "SELECT ems_companies.*, GROUP_CONCAT(ems_company_shifts.shift_id) as shifts FROM ems_companies LEFT JOIN ems_company_shifts ON ems_companies.id=ems_company_shifts.company_id GROUP BY ems_company_shifts.company_id" );
             $data[ 'companies' ] = $companies = $sql -> result ();
             
             if ( count ( $companies ) > 0 ) {
                 foreach ( $companies as $company ) {
-                    $data[ 'shifts' ][ $company -> id ] = $this -> get_shifts ( $company -> id );
+                    $data[ 'shifts' ][ $company -> id ] = $this -> get_shifts ( $company -> shifts );
                 }
             }
             
@@ -62,14 +62,14 @@
         
         /**
          * -----------------
-         * @param $company_id
+         * @param $shift_id
          * @return mixed
          * get shifts by company id
          * -----------------
          */
         
-        public function get_shifts ( $company_id ) {
-            $data = $this -> db -> query ( "Select * from ems_shifts where id IN (Select shift_id from ems_company_shifts where company_id IN ($company_id))" );
+        public function get_shifts ( $shift_id ) {
+            $data = $this -> db -> query ( "Select * from ems_shifts where id IN ($shift_id)" );
             return $data -> result ();
         }
         
@@ -82,12 +82,12 @@
          */
         
         public function get_company_by_id_with_shifts ( $id ) {
-            $sql = $this -> db -> get_where ( 'companies', array ( 'id' => $id ) );
+            $sql = $this -> db -> query ( "SELECT ems_companies.*, GROUP_CONCAT(ems_company_shifts.shift_id) as shifts FROM ems_companies LEFT JOIN ems_company_shifts ON ems_companies.id=ems_company_shifts.company_id where ems_companies.id=$id GROUP BY ems_company_shifts.company_id" );
             $data[ 'company' ] = $company = $sql -> row ();
-            $data[ 'shifts' ] = $this -> get_shifts ( $company -> id );
+            $data[ 'shifts' ] = $this -> get_shifts ( $company -> shifts );
             return $data;
         }
-    
+        
         /**
          * -----------------
          * @param $company_id

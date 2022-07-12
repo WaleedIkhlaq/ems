@@ -4,5 +4,6 @@
     $route[ 'default_controller' ] = 'login';
     $route[ 'create-account' ] = 'login/register';
     $route[ 'password-forgot' ] = 'login/forgot_password';
+    $route[ 'logout' ] = 'dashboard/logout';
     $route[ '404_override' ] = '';
     $route[ 'translate_uri_dashes' ] = FALSE;

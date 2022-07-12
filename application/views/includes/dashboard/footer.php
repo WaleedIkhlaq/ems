@@ -27,6 +27,6 @@
 <!-- Template JS File -->
 <script src="<?php echo base_url ( '/assets/js/scripts.js' ) ?>"></script>
 <!-- Custom JS File -->
-<script src="<?php echo base_url ( '/assets/js/custom.js' ) ?>"></script>
+<script src="<?php echo base_url ( '/assets/js/custom.js?ver=' . rand () ) ?>"></script>
 </body>
 </html>

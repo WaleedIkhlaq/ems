@@ -200,3 +200,31 @@
     function time_format ( $time ) {
         return date ( 'h:i A', strtotime ( $time ) );
     }
+    
+    /**
+     * ------------
+     * @param $company_id
+     * @return mixed
+     * get company by id
+     * ------------
+     */
+    
+    function get_company_by_id ( $company_id ) {
+        $ci = &get_instance ();
+        $ci -> load -> model ( 'CompanyModel' );
+        return $ci -> CompanyModel -> get_company_by_id ( $company_id );
+    }
+    
+    /**
+     * ------------
+     * @param $shift_id
+     * @return mixed
+     * get shift by id
+     * ------------
+     */
+    
+    function get_shift_by_id ( $shift_id ) {
+        $ci = &get_instance ();
+        $ci -> load -> model ( 'ShiftModel' );
+        return $ci -> ShiftModel -> get_shift_by_id ( $shift_id );
+    }
