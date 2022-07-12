@@ -63,7 +63,7 @@
         'database',
         'session',
         'form_validation',
-        'pagination'
+        'pagination',
     );
     
     /*
