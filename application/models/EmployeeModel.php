@@ -52,7 +52,21 @@
             $data = $this -> db -> get_where ( 'employee_companies', array ( 'employee_id' => $id ) );
             return $data -> result ();
         }
-    
+        
+        /**
+         * -----------------
+         * @param $company_id
+         * @param $shift_id
+         * @return mixed
+         * get employees by company & shift id
+         * -----------------
+         */
+        
+        public function get_employees_by_company_shift ( $company_id, $shift_id ) {
+            $data = $this -> db -> query ( "Select * from ems_employees where id IN (Select employee_id from ems_employee_companies where company_id=$company_id and shift_id=$shift_id)" );
+            return $data -> result ();
+        }
+        
         /**
          * -----------------
          * @return array

@@ -85,11 +85,20 @@
                     <span>Leaves</span>
                 </a>
                 <ul class="dropdown-menu">
-                    <li class="<?php echo ( $parent_uri == 'leaves' and $child_uri == 'search' ) ? 'active' : '' ?>">
+                    <li class="<?php echo ( $parent_uri == 'leaves' and $child_uri == 'assigned' ) ? 'active' : '' ?>">
+                        <a class="nav-link" href="<?php echo base_url ( '/leaves/assigned' ) ?>">All Assigned Leaves</a>
+                    </li>
+                    
+                    <li class="<?php echo ( $parent_uri == 'leaves' and $child_uri == 'assign' ) ? 'active' : '' ?>">
+                        <a class="nav-link" href="<?php echo base_url ( '/leaves/assign' ) ?>">Assign Leave</a>
+                    </li>
+                    <hr style="margin: 0">
+                    
+                    <li class="<?php echo ( $parent_uri == 'leaves' and $child_uri == 'index' ) ? 'active' : '' ?>">
                         <a class="nav-link" href="<?php echo base_url ( '/leaves/index' ) ?>">All Leaves</a>
                     </li>
                     
-                    <li class="<?php echo ( $parent_uri == 'leaves' and $child_uri == 'search' ) ? 'active' : '' ?>">
+                    <li class="<?php echo ( $parent_uri == 'leaves' and $child_uri == 'add' ) ? 'active' : '' ?>">
                         <a class="nav-link" href="<?php echo base_url ( '/leaves/add' ) ?>">Add Leave</a>
                     </li>
                 </ul>

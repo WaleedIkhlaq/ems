@@ -16,6 +16,8 @@
         public function __construct () {
             parent ::__construct ();
             $this -> load -> model ( 'LeaveModel' );
+            $this -> load -> model ( 'EmployeeModel' );
+            $this -> load -> model ( 'CompanyModel' );
         }
         
         /**
@@ -63,8 +65,8 @@
                 $title = $this -> input -> post ( 'title', true );
                 
                 $info = array (
-                    'user_id'    => get_logged_in_user_id (),
-                    'title'      => $title,
+                    'user_id' => get_logged_in_user_id (),
+                    'title'   => $title,
                 );
                 
                 $leave_id = $this -> LeaveModel -> add ( $info );
@@ -115,8 +117,8 @@
                 $title = $this -> input -> post ( 'title', true );
                 
                 $info = array (
-                    'user_id'    => get_logged_in_user_id (),
-                    'title'      => $title,
+                    'user_id' => get_logged_in_user_id (),
+                    'title'   => $title,
                 );
                 $where = array (
                     'id' => decrypt_string ( $id ),
@@ -146,6 +148,163 @@
             $this -> LeaveModel -> delete ( $id );
             $this -> session -> set_flashdata ( 'response', 'Leave has been deleted.' );
             return redirect ( base_url ( '/leaves/index' ) );
+        }
+        
+        /**
+         * -----------------
+         * loads the all assigned leaves page
+         * -----------------
+         */
+        
+        public function assigned () {
+            $data[ 'title' ] = $title = 'All Assigned Leaves';
+            dashboard_header ( $title );
+            $data[ 'leaves' ] = $this -> LeaveModel -> get_assigned_leaves ();
+            $this -> load -> view ( 'leaves/assigned', $data );
+            dashboard_footer ();
+        }
+        
+        /**
+         * -----------------
+         * loads the assign leaves form
+         * -----------------
+         */
+        
+        public function assign () {
+            $data[ 'title' ] = $title = 'Assign New Leave';
+            
+            if ( isset( $_POST[ 'action' ] ) and $_POST[ 'action' ] == 'process-assign-leaves' )
+                $this -> process_assign_leaves ();
+            
+            dashboard_header ( $title );
+            $data[ 'companies' ] = $this -> CompanyModel -> get_companies ();
+            $this -> load -> view ( 'leaves/assign', $data );
+            dashboard_footer ();
+        }
+        
+        /**
+         * -----------------
+         * process the form validation
+         * assign new leaves
+         * -----------------
+         */
+        
+        private function process_assign_leaves () {
+            $this -> form_validation -> set_rules ( 'company-id', 'company', 'required|trim|xss_clean' );
+            $this -> form_validation -> set_rules ( 'shift-id', 'shift', 'required|trim|xss_clean' );
+            $this -> form_validation -> set_rules ( 'employee-id', 'employee', 'required|trim|xss_clean' );
+            $this -> form_validation -> set_rules ( 'start-date', 'start date', 'required|trim|xss_clean' );
+            $this -> form_validation -> set_rules ( 'end-date', 'end date', 'required|trim|xss_clean' );
+            $this -> form_validation -> set_rules ( 'approved', 'approved', 'required|trim|xss_clean' );
+            
+            if ( $this -> form_validation -> run () ) {
+                $company_id = $this -> input -> post ( 'company-id', true );
+                $shift_id = $this -> input -> post ( 'shift-id', true );
+                $employee_id = $this -> input -> post ( 'employee-id', true );
+                $start_date = $this -> input -> post ( 'start-date', true );
+                $end_date = $this -> input -> post ( 'end-date', true );
+                $approved = $this -> input -> post ( 'approved', true );
+                $description = $this -> input -> post ( 'description', true );
+                
+                $info = array (
+                    'user_id'     => get_logged_in_user_id (),
+                    'employee_id' => $employee_id,
+                    'company_id'  => $company_id,
+                    'shift_id'    => $shift_id,
+                    'start_date'  => date ( 'Y-m-d', strtotime ( $start_date ) ),
+                    'end_date'    => date ( 'Y-m-d', strtotime ( $end_date ) ),
+                    'description' => $description,
+                    'approved'    => $approved,
+                );
+                
+                $leave_id = $this -> LeaveModel -> assign ( $info );
+                if ( $leave_id > 0 ) {
+                    $this -> session -> set_flashdata ( 'response', 'Leave has been assigned.' );
+                    return redirect ( base_url ( '/leaves/assign' ) );
+                }
+                else {
+                    $this -> session -> set_flashdata ( 'error', 'Ops! Something happened. Please try again' );
+                    return;
+                }
+                
+            }
+        }
+        
+        /**
+         * -----------------
+         * loads the edit assign leaves form
+         * -----------------
+         */
+        
+        public function edit_assigned () {
+            
+            $id = validate_url_id ( '/leaves/assigned' );
+            
+            $data[ 'title' ] = $title = 'Edit Assigned Leave';
+            
+            if ( isset( $_POST[ 'action' ] ) and $_POST[ 'action' ] == 'process-edit-assigned-leave' )
+                $this -> process_edit_assigned_leave ();
+            
+            dashboard_header ( $title );
+            $data[ 'leave' ] = $this -> LeaveModel -> get_assigned_leave_by_id ( $id );
+            $data[ 'company' ] = get_company_by_id ( $data[ 'leave' ] -> company_id );
+            $data[ 'shift' ] = get_company_by_id ( $data[ 'leave' ] -> shift_id );
+            $data[ 'employee' ] = get_employee_by_id ( $data[ 'leave' ] -> employee_id );
+            $this -> load -> view ( 'leaves/edit-assigned', $data );
+            dashboard_footer ();
+        }
+        
+        /**
+         * -----------------
+         * process the form validation
+         * edit assigned leaves
+         * -----------------
+         */
+        
+        private function process_edit_assigned_leave () {
+            $this -> form_validation -> set_rules ( 'leave-id', 'leave', 'required|trim|xss_clean' );
+            $this -> form_validation -> set_rules ( 'start-date', 'start date', 'required|trim|xss_clean' );
+            $this -> form_validation -> set_rules ( 'end-date', 'end date', 'required|trim|xss_clean' );
+            $this -> form_validation -> set_rules ( 'approved', 'approved', 'required|trim|xss_clean' );
+            
+            if ( $this -> form_validation -> run () ) {
+                $leave_id = $this -> input -> post ( 'leave-id', true );
+                $start_date = $this -> input -> post ( 'start-date', true );
+                $end_date = $this -> input -> post ( 'end-date', true );
+                $approved = $this -> input -> post ( 'approved', true );
+                $description = $this -> input -> post ( 'description', true );
+                
+                $info = array (
+                    'user_id'     => get_logged_in_user_id (),
+                    'start_date'  => date ( 'Y-m-d', strtotime ( $start_date ) ),
+                    'end_date'    => date ( 'Y-m-d', strtotime ( $end_date ) ),
+                    'description' => $description,
+                    'approved'    => $approved,
+                );
+                
+                $where = array (
+                    'id' => decrypt_string ( $leave_id ),
+                );
+                
+                $this -> LeaveModel -> edit_assigned_leave ( $info, $where );
+                
+                $this -> session -> set_flashdata ( 'response', 'Leave has been updated.' );
+                return redirect ( $_SERVER[ 'HTTP_REFERER' ] );
+                
+            }
+        }
+    
+        /**
+         * -----------------
+         * delete assigned leaves
+         * -----------------
+         */
+    
+        public function delete_assigned_leave () {
+            $id = validate_url_id ( 'leaves/assigned' );
+            $this -> LeaveModel -> delete_assigned_leave ( $id );
+            $this -> session -> set_flashdata ( 'response', 'Assigned Leave has been deleted.' );
+            return redirect ( base_url ( '/leaves/assigned' ) );
         }
         
     }

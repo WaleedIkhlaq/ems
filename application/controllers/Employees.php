@@ -195,4 +195,21 @@
             return redirect ( base_url ( '/employees/index' ) );
         }
         
+        /**
+         * -----------------
+         * get employees by shift & company id
+         * via ajax request
+         * -----------------
+         */
+        
+        public function getEmployeesByShiftAndCompany () {
+            $company_id = $this -> input -> get ( 'company_id', true );
+            $shift_id = $this -> input -> get ( 'shift_id', true );
+            
+            if ( isset( $company_id ) and $company_id > 0 and isset( $shift_id ) and $shift_id > 0 ) {
+                $data[ 'employees' ] = $this -> EmployeeModel -> get_employees_by_company_shift ( $company_id, $shift_id );
+                $this -> load -> view ( 'employees/employees-company-shifts', $data );
+            }
+        }
+        
     }

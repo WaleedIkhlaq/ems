@@ -5,5 +5,7 @@
     $route[ 'create-account' ] = 'login/register';
     $route[ 'password-forgot' ] = 'login/forgot_password';
     $route[ 'logout' ] = 'dashboard/logout';
+    $route[ 'leaves/assigned/edit' ] = 'leaves/edit_assigned';
+    $route[ 'leaves/assigned/delete' ] = 'leaves/delete_assigned_leave';
     $route[ '404_override' ] = '';
     $route[ 'translate_uri_dashes' ] = FALSE;

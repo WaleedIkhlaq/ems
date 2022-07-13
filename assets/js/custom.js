@@ -61,3 +61,28 @@ function if_late_arrival ( id ) {
         jQuery ( '.late-hours-' + id + ' input' ).prop ( 'required', false );
     }
 }
+
+function getEmployeesByShiftAndCompany ( shift_id ) {
+    let csrf_token = jQuery ( '#csrf_field' ).val ();
+    let company = jQuery ( '#company' ).val ();
+
+    if ( shift_id > 0 && company > 0 ) {
+        jQuery.ajax ( {
+            url: path + 'employees/getEmployeesByShiftAndCompany',
+            type: 'get',
+            data: {
+                csrf_ems_token: csrf_token,
+                company_id: company,
+                shift_id: shift_id,
+            },
+            contentType: 'application/json',
+            beforeSend: function () {
+                jQuery ( '#assignLeaves' ).html ( 'Searching employees...' );
+            },
+            success: function ( response ) {
+                jQuery ( '#assignLeaves' ).html ( 'Submit' );
+                jQuery ( '#employees' ).html ( response );
+            }
+        } );
+    }
+}
