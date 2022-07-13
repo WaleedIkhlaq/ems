@@ -88,3 +88,8 @@
     define ( 'APP_SLUG', 'EMS' );
     define ( 'secret_key', '7VewT*3-cYD!TBJ2' );
     define ( 'secret_iv', 's7Y%#upy^+7nr&GA' );
+    
+    define ( 'ABSENT_STATUS', 0 );
+    define ( 'PRESENT_STATUS', 1 );
+    define ( 'LEAVE_STATUS', 2 );
+    define ( 'LATE_ARRIVAL_STATUS', 3 );

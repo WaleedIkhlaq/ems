@@ -1,5 +1,9 @@
 let path = 'http://ems.erpsirius.net/';
 
+jQuery ( function () {
+    jQuery ( ".datepicker" ).datepicker ();
+} );
+
 function getCompanyShifts ( company_id, row ) {
     let csrf_token = jQuery ( '#csrf_field' ).val ();
 
@@ -46,4 +50,14 @@ function addMoreCompanies () {
             jQuery ( '.select2-' + row ).select2 ();
         }
     } );
+}
+
+function if_late_arrival ( id ) {
+    if ( jQuery ( '#late-arrival-' + id ).is ( ':checked' ) ) {
+        jQuery ( '.late-hours-' + id ).css ( 'display', 'flex' );
+        jQuery ( '.late-hours-' + id + ' input' ).prop ( 'required', true );
+    } else {
+        jQuery ( '.late-hours-' + id ).css ( 'display', 'none' );
+        jQuery ( '.late-hours-' + id + ' input' ).prop ( 'required', false );
+    }
 }

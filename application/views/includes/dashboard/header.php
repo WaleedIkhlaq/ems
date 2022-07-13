@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="<?php echo base_url ( '/assets/css/style.css' ); ?>">
     <link rel="stylesheet" href="<?php echo base_url ( '/assets/css/components.css' ); ?>">
     <link rel="stylesheet" href="<?php echo base_url ( '/assets/bundles/datatables/datatables.min.css' ); ?>">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
     <link rel="stylesheet"
           href="<?php echo base_url ( '/assets/bundles/datatables/DataTables-1.10.16/css/dataTables.bootstrap4.min.css' ); ?>">
     <link rel="stylesheet"

@@ -31,3 +31,66 @@
 .select2-container--default .select2-selection--single .select2-selection__rendered {
     line-height: 42px !important;
 }
+
+.attendance-list ul {
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    height: 100%;
+    margin-bottom: 0;
+    justify-content: center;
+    align-items: center;
+}
+
+.attendance-list li {
+    flex: 25%;
+    position: relative;
+}
+
+.attendance-list li input {
+    float: left;
+    display: inline-block;
+    margin-top: 5px;
+    margin-right: 5px;
+    width: 15px;
+    height: 15px;
+}
+
+.attendance-list li span {
+
+}
+
+.attendance-list td, .attendance-list th {
+    padding: 10px !important;
+}
+
+.attendance-info {
+    background: #f5f5f5;
+    padding: 10px;
+    margin-bottom: 15px;
+}
+
+.attendance-info ul {
+    padding: 0;
+    list-style-type: none;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 0;
+}
+
+.attendance-info li {
+    flex: 100%;
+}
+
+.late-arrival {
+    display: none;
+    width: 100%;
+    position: absolute;
+    top: -50px;
+}
+
+.late-arrival input {
+    width: 100% !important;
+}

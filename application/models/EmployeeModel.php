@@ -52,6 +52,26 @@
             $data = $this -> db -> get_where ( 'employee_companies', array ( 'employee_id' => $id ) );
             return $data -> result ();
         }
+    
+        /**
+         * -----------------
+         * @return array
+         * get employees for attendance
+         * -----------------
+         */
+        
+        public function get_employees_for_attendance () {
+            $company_id = $this -> input -> get ( 'company-id', true );
+            $shift_id = $this -> input -> get ( 'shift-id', true );
+            
+            if ( isset( $company_id ) and !empty( trim ( $company_id ) ) and isset( $shift_id ) and !empty( trim ( $shift_id ) ) ) {
+                $employees = $this -> db -> query ( "Select ems_employees.* from ems_employee_companies INNER JOIN ems_employees ON ems_employee_companies.employee_id=ems_employees.id where ems_employee_companies.company_id=$company_id and ems_employee_companies.shift_id=$shift_id" );
+                return $employees -> result ();
+            }
+            else
+                return array ();
+            
+        }
         
         /**
          * -----------------

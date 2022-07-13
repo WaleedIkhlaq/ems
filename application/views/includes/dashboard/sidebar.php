@@ -21,12 +21,12 @@
                     <span>Attendance</span>
                 </a>
                 <ul class="dropdown-menu">
-                    <li class="<?php echo ( $parent_uri == 'attendance' and $child_uri == 'search' ) ? 'active' : '' ?>">
-                        <a class="nav-link" href="<?php echo base_url ( '/attendance/search' ) ?>">Search Attendance</a>
+                    <li class="<?php echo ( $parent_uri == 'attendance' and $child_uri == 'index' ) ? 'active' : '' ?>">
+                        <a class="nav-link" href="<?php echo base_url ( '/attendance/index' ) ?>">All Attendances</a>
                     </li>
                     
-                    <li class="<?php echo ( $parent_uri == 'attendance' and $child_uri == 'add' ) ? 'active' : '' ?>">
-                        <a class="nav-link" href="<?php echo base_url ( '/attendance/add' ) ?>">Mark Attendance</a>
+                    <li class="<?php echo ( $parent_uri == 'attendance' and $child_uri == 'mark' ) ? 'active' : '' ?>">
+                        <a class="nav-link" href="<?php echo base_url ( '/attendance/mark' ) ?>">Mark Attendance</a>
                     </li>
                 </ul>
             </li>

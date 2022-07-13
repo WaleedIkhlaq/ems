@@ -228,3 +228,56 @@
         $ci -> load -> model ( 'ShiftModel' );
         return $ci -> ShiftModel -> get_shift_by_id ( $shift_id );
     }
+    
+    /**
+     * ------------
+     * @param $attendance_id
+     * @param $status
+     * @return mixed
+     * count attendance based on status
+     * ------------
+     */
+    
+    function get_attendance_statues ( $attendance_id, $status ) {
+        $ci = &get_instance ();
+        $ci -> load -> model ( 'AttendanceModel' );
+        return $ci -> AttendanceModel -> get_attendance_statues ( $attendance_id, $status );
+    }
+    
+    /**
+     * ------------
+     * @param $date
+     * @return false|string
+     * formats the date and time
+     * ------------
+     */
+    
+    function date_setter ( $date ) {
+        return date ( 'Y-m-d g:i A', strtotime ( $date ) );
+    }
+    
+    /**
+     * ------------
+     * @param $date
+     * @return bool
+     * check if the date is valid
+     * ------------
+     */
+    
+    function is_valid_date ( $date ) {
+        return (bool)strtotime ( $date );
+    }
+    
+    /**
+     * ------------
+     * @param $employee_id
+     * @return mixed
+     * get employee by id
+     * ------------
+     */
+    
+    function get_employee_by_id ( $employee_id ) {
+        $ci = &get_instance ();
+        $ci -> load -> model ( 'EmployeeModel' );
+        return $ci -> EmployeeModel -> get_employee_by_id ( $employee_id );
+    }
