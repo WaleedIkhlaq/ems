@@ -30,14 +30,40 @@
         
         /**
          * -----------------
+         * @param $id
+         * @return array
+         * get salary sheet by id
+         * -----------------
+         */
+        
+        public function get_salary_sheet ( $id ) {
+            $data = $this -> db -> get_where ( 'salary_sheets', array ( 'id' => $id ) );
+            return $data -> row ();
+        }
+        
+        /**
+         * -----------------
          * @return array
          * get salary sheets
          * -----------------
          */
         
-        public function get_salaries () {
-            $this -> db -> order_by ( 'salary_date', 'DESC' );
+        public function get_salary_sheets () {
+            $this -> db -> order_by ( 'id', 'DESC' );
             $data = $this -> db -> get ( 'salary_sheets' );
+            return $data -> result ();
+        }
+        
+        /**
+         * -----------------
+         * @param $salary_sheet_id
+         * @return array
+         * get salaries
+         * -----------------
+         */
+        
+        public function get_salaries ( $salary_sheet_id ) {
+            $data = $this -> db -> get_where ( 'salaries', array ( 'salary_sheet_id' => $salary_sheet_id ) );
             return $data -> result ();
         }
         
@@ -60,6 +86,32 @@
             }
             else
                 return array ();
+        }
+        
+        /**
+         * -----------------
+         * @param $id
+         * @return mixed
+         * delete salaries from the database
+         * -----------------
+         */
+        
+        public function deleteSalaries ( $id ) {
+            $this -> db -> delete ( 'salaries', array ( 'salary_sheet_id' => $id ) );
+            return $this -> db -> affected_rows ();
+        }
+        
+        /**
+         * -----------------
+         * @param $id
+         * @return mixed
+         * delete salary sheet from the database
+         * -----------------
+         */
+        
+        public function delete ( $id ) {
+            $this -> db -> delete ( 'salary_sheets', array ( 'id' => $id ) );
+            return $this -> db -> affected_rows ();
         }
         
     }

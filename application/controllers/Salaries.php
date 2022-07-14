@@ -29,7 +29,7 @@
         public function index () {
             $data[ 'title' ] = $title = 'All Salary Sheets';
             dashboard_header ( $title );
-            $data[ 'salaries' ] = $this -> SalaryModel -> get_salaries ();
+            $data[ 'salaries' ] = $this -> SalaryModel -> get_salary_sheets ();
             $this -> load -> view ( 'salaries/index', $data );
             dashboard_footer ();
         }
@@ -146,93 +146,55 @@
         
         /**
          * -----------------
-         * loads the edit salaries form
+         * loads the edit salary sheet form
          * -----------------
          */
         
         public function edit () {
-            $data[ 'title' ] = $title = 'Edit Employee';
+            $data[ 'title' ] = $title = 'Edit Salary Sheet';
             
-            $id = validate_url_id ( 'employees/index' );
-            if ( isset( $_POST[ 'action' ] ) and $_POST[ 'action' ] == 'process-update-employees' )
-                $this -> process_update_employees ();
+            $id = validate_url_id ( 'salaries/index' );
+            if ( isset( $_POST[ 'action' ] ) and $_POST[ 'action' ] == 'process-update-salaries' )
+                $this -> process_update_salaries ();
             
             dashboard_header ( $title );
-            $data[ 'employee' ] = $this -> SalaryModel -> get_employee_by_id ( $id );
-            $data[ 'companies' ] = $this -> SalaryModel -> get_employee_companies ( $id );
-            $this -> load -> view ( 'employees/edit', $data );
+            $data[ 'salary_sheet' ] = $this -> SalaryModel -> get_salary_sheet ( $id );
+            $data[ 'salaries' ] = $this -> SalaryModel -> get_salaries ( $id );
+            $this -> load -> view ( 'salaries/edit', $data );
             dashboard_footer ();
         }
         
         /**
          * -----------------
          * process the form validation
-         * update employees
+         * update salaries
          * -----------------
          */
         
-        private function process_update_employees () {
-            $this -> form_validation -> set_rules ( 'id', 'employee id', 'required|trim|xss_clean' );
-            $this -> form_validation -> set_rules ( 'first-name', 'first name', 'required|trim|xss_clean' );
-            $this -> form_validation -> set_rules ( 'last-name', 'last name', 'required|trim|xss_clean' );
+        private function process_update_salaries () {
+            $this -> form_validation -> set_rules ( 'salary-sheet-id', 'salary sheet id', 'required|numeric|trim|xss_clean' );
             
             if ( $this -> form_validation -> run () ) {
-                $id = $this -> input -> post ( 'id', true );
-                $first_name = $this -> input -> post ( 'first-name', true );
-                $last_name = $this -> input -> post ( 'last-name', true );
-                $email = $this -> input -> post ( 'email', true );
-                $contact_no = $this -> input -> post ( 'contact-no', true );
-                $address = $this -> input -> post ( 'address', true );
+                $salary_sheet_id = $this -> input -> post ( 'salary-sheet-id', true );
                 
-                $info = array (
-                    'user_id'    => get_logged_in_user_id (),
-                    'first_name' => $first_name,
-                    'last_name'  => $last_name,
-                    'email'      => $email,
-                    'contact_no' => $contact_no,
-                    'address'    => $address,
-                );
-                $where = array (
-                    'id' => decrypt_string ( $id )
-                );
-                
-                $this -> SalaryModel -> edit ( $info, $where );
-                $this -> SalaryModel -> deleteCompanies ( decrypt_string ( $id ) );
-                $this -> addCompanies ( decrypt_string ( $id ) );
-                $this -> session -> set_flashdata ( 'response', 'Employee has been updated.' );
+                $this -> SalaryModel -> deleteSalaries ( $salary_sheet_id );
+                $this -> addSalaries ( $salary_sheet_id );
+                $this -> session -> set_flashdata ( 'response', 'Salary sheet has been updated.' );
                 return redirect ( $_SERVER[ 'HTTP_REFERER' ] );
-                
             }
         }
         
         /**
          * -----------------
-         * delete employees
+         * delete salaries
          * -----------------
          */
         
         public function delete () {
-            $id = validate_url_id ( 'employees/index' );
+            $id = validate_url_id ( 'salaries/index' );
             $this -> SalaryModel -> delete ( $id );
-            $this -> session -> set_flashdata ( 'response', 'Employee has been deleted.' );
-            return redirect ( base_url ( '/employees/index' ) );
-        }
-        
-        /**
-         * -----------------
-         * get employees by shift & company id
-         * via ajax request
-         * -----------------
-         */
-        
-        public function getEmployeesByShiftAndCompany () {
-            $company_id = $this -> input -> get ( 'company_id', true );
-            $shift_id = $this -> input -> get ( 'shift_id', true );
-            
-            if ( isset( $company_id ) and $company_id > 0 and isset( $shift_id ) and $shift_id > 0 ) {
-                $data[ 'employees' ] = $this -> SalaryModel -> get_employees_by_company_shift ( $company_id, $shift_id );
-                $this -> load -> view ( 'employees/employees-company-shifts', $data );
-            }
+            $this -> session -> set_flashdata ( 'response', 'Salary sheet has been deleted.' );
+            return redirect ( base_url ( '/salaries/index' ) );
         }
         
     }

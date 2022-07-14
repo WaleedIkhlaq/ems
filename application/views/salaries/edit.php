@@ -8,93 +8,133 @@
                 </div>
                 <form method="post">
                     <?php csrf_field (); ?>
-                    <?php hidden_action_field ( 'process-update-employees' ); ?>
-                    <input type="hidden" name="id" value="<?php echo encrypt_string ( $employee -> id ) ?>">
-                    <input type="hidden" id="row" value="<?php echo count ( $companies ) + 1 ?>">
+                    <?php hidden_action_field ( 'process-update-salaries' ); ?>
+                    <input type="hidden" name="salary-sheet-id" value="<?php echo $salary_sheet -> id ?>">
+                    
                     <div class="card-body pb-0">
-                        <div class="row">
-                            <div class="form-group col-lg-3">
-                                <label>First Name</label>
-                                <input type="text" placeholder="First Name" required="required" autofocus="autofocus"
-                                       class="form-control" name="first-name"
-                                       value="<?php echo $employee -> first_name ?>">
-                            </div>
-                            
-                            <div class="form-group col-lg-3">
-                                <label>Last Name</label>
-                                <input type="text" placeholder="Last Name" required="required"
-                                       class="form-control" name="last-name"
-                                       value="<?php echo $employee -> last_name ?>">
-                            </div>
-                            
-                            <div class="form-group col-lg-3">
-                                <label>Email</label>
-                                <input type="email" placeholder="Email" class="form-control" name="email"
-                                       value="<?php echo $employee -> email ?>">
-                            </div>
-                            
-                            <div class="form-group col-lg-3">
-                                <label>Contact No.</label>
-                                <input type="text" maxlength="15" placeholder="Contact No." class="form-control"
-                                       name="contact-no"
-                                       value="<?php echo $employee -> contact_no ?>">
-                            </div>
-                        </div>
-                        
-                        <div class="row">
-                            <div class="form-group col-lg-12">
-                                <label>Address</label>
-                                <textarea name="address" class="form-control no-resize"
-                                          rows="5"><?php echo $employee -> address ?></textarea>
-                            </div>
-                        </div>
-                        
-                        <?php
-                            if ( count ( $companies ) > 0 ) {
-                                foreach ( $companies as $company ) {
-                                    $companyInfo = get_company_by_id ( $company -> company_id );
-                                    $shiftInfo = get_shift_by_id ( $company -> shift_id );
+                        <table class="table table-bordered table-striped attendance-list">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Name</th>
+                                <th>Net Salary</th>
+                                <th>Month</th>
+                                <th>No. of Days</th>
+                                <th>No. of Hours</th>
+                                <th>No. of Days Present</th>
+                                <th>No. of Days Absent</th>
+                                <th>No. of Leaves</th>
+                                <th>Late Arrivals (Hours)</th>
+                                <th>No. of Hours Worked</th>
+                                <th>Gross Salary Salary</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <?php
+                                $counter = 1;
+                                $netPayable = 0;
+                                $date = $salary_sheet -> salary_date;
+                                if ( count ( $salaries ) > 0 ) {
+                                    foreach ( $salaries as $salary ) {
+                                        $employee = get_employee_by_id ( $salary -> employee_id );
+                                        $netSalary = $salary -> net_salary;
+                                        $monthDays = countWorkingDays ( date ( 'Y', strtotime ( $date ) ), date ( 'm', strtotime ( $date ) ) );
+                                        $noOfHours = $salary -> total_hours;
+                                        $totalNoOfPresents = $salary -> days_present;
+                                        $totalNoOfAbsents = $salary -> days_absent;
+                                        $totalNoOfLeaves = $salary -> days_leave;
+                                        $totalNoOfLateArrivals = $salary -> late_arrivals;
+                                        $totalHoursOfLateArrivals = $salary -> late_arrival_hours;
+                                        $noOfHoursWorked = $salary -> hours_worked;
+                                        $grossSalary = $salary -> gross_salary;
+                                        $netPayable = $netPayable + $grossSalary;
+                                        
+                                        ?>
+                                        <input type="hidden" name="employee-id[]"
+                                               value="<?php echo $employee -> id ?>">
+                                        
+                                        <input type="hidden" name="net-salary[]"
+                                               value="<?php echo $netSalary ?>">
+                                        
+                                        <input type="hidden" name="total-hours[]"
+                                               value="<?php echo $noOfHours ?>">
+                                        
+                                        <input type="hidden" name="days-present[]"
+                                               value="<?php echo $totalNoOfPresents ?>">
+                                        
+                                        <input type="hidden" name="days-absent[]"
+                                               value="<?php echo $totalNoOfAbsents ?>">
+                                        
+                                        <input type="hidden" name="days-leave[]"
+                                               value="<?php echo $totalNoOfLeaves ?>">
+                                        
+                                        <input type="hidden" name="late-arrivals[]"
+                                               value="<?php echo $totalNoOfLateArrivals ?>">
+                                        
+                                        <input type="hidden" name="late-arrival-hours[]"
+                                               value="<?php echo $totalHoursOfLateArrivals ?>">
+                                        
+                                        <input type="hidden" name="hours-worked[]"
+                                               value="<?php echo $noOfHoursWorked ?>">
+                                        
+                                        <input type="hidden" name="gross-salary[]"
+                                               value="<?php echo $grossSalary ?>">
+                                        <tr>
+                                            <td>
+                                                <?php echo $counter++ ?>
+                                            </td>
+                                            <td>
+                                                <?php echo $employee -> first_name . ' ' . $employee -> last_name ?>
+                                            </td>
+                                            <td>
+                                                <?php echo number_format ( $netSalary, 2 ) ?>
+                                            </td>
+                                            <td>
+                                                <?php echo date ( "F", strtotime ( $date ) ); ?>
+                                            </td>
+                                            <td>
+                                                <?php echo $monthDays ?>
+                                            </td>
+                                            <td>
+                                                <?php echo $noOfHours; ?>
+                                            </td>
+                                            <td>
+                                                <?php echo ( $totalNoOfPresents + $totalNoOfLateArrivals ) ?>
+                                            </td>
+                                            <td>
+                                                <?php echo $totalNoOfAbsents ?>
+                                            </td>
+                                            <td>
+                                                <?php echo $totalNoOfLeaves ?>
+                                            </td>
+                                            <td>
+                                                <?php echo $totalHoursOfLateArrivals > 0 ? $totalHoursOfLateArrivals : 0 ?>
+                                            </td>
+                                            <td>
+                                                <?php echo $noOfHoursWorked; ?>
+                                            </td>
+                                            <td>
+                                                <?php echo number_format ( $grossSalary, 2 ) ?>
+                                            </td>
+                                        </tr>
+                                        <?php
+                                    }
                                     ?>
-                                    <div class="row">
-                                        <div class="form-group col-lg-6">
-                                            <label>Company</label>
-                                            <select name="company-id[]" class="form-control select2"
-                                                    data-placeholder="Select">
-                                                <option value="<?php echo $companyInfo -> id; ?>">
-                                                    <?php echo $companyInfo -> title; ?>
-                                                </option>
-                                            </select>
-                                        </div>
-                                        
-                                        <div class="form-group col-lg-3">
-                                            <label>Shift</label>
-                                            <select name="shift-id[]" class="form-control select2"
-                                                    data-placeholder="Select">
-                                                <option value="<?php echo $shiftInfo -> id; ?>">
-                                                    <?php echo $shiftInfo -> title; ?>
-                                                </option>
-                                            </select>
-                                        </div>
-                                        
-                                        <div class="form-group col-lg-3">
-                                            <label>Salary</label>
-                                            <input type="number" step="0.01" placeholder="Salary" class="form-control"
-                                                   name="salary[]"
-                                                   value="<?php echo $company -> salary ?>">
-                                        </div>
-                                    </div>
+                                    <tr>
+                                        <td colspan="11" align="right">
+                                            <strong>Net Payable</strong>
+                                        </td>
+                                        <td>
+                                            <?php echo number_format ( $netPayable, 2 ) ?>
+                                        </td>
+                                    </tr>
                                     <?php
                                 }
-                            }
-                        ?>
-                        
-                        <div id="addMoreCompaniesRow"></div>
-                    
+                            ?>
+                            </tbody>
+                        </table>
                     </div>
                     <div class="card-footer pt-0">
-                        <a href="javascript:void(0)" id="addMoreCompanies" onclick="addMoreCompanies()"
-                           class="btn btn-dark mr-1"
-                           type="submit">Add More</a>
                         <button class="btn btn-primary mr-1" type="submit">Update</button>
                     </div>
                 </form>
