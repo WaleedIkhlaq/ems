@@ -28,6 +28,7 @@
                                 $counter = 1;
                                 if ( count ( $employees ) > 0 ) {
                                     foreach ( $employees as $employee ) {
+                                        $isOnLeave = is_employee_on_leave ( $employee -> id, $this -> input -> get ( 'company-id' ), $this -> input -> get ( 'shift-id' ) );
                                         ?>
                                         <input type="hidden" name="employee-id[]" value="<?php echo $employee -> id ?>">
                                         <tr>
@@ -38,7 +39,8 @@
                                                 <ul>
                                                     <li>
                                                         <input type="radio" name="status[<?php echo $employee -> id ?>]"
-                                                               value="<?php echo PRESENT_STATUS ?>" checked="checked"
+                                                               value="<?php echo PRESENT_STATUS ?>"
+                                                            <?php echo ( empty( $isOnLeave ) ) ? 'checked="checked"' : '' ?>
                                                                onclick="if_late_arrival(<?php echo $employee -> id ?>)">
                                                         <span>Present</span>
                                                     </li>
@@ -51,7 +53,8 @@
                                                     <li>
                                                         <input type="radio" name="status[<?php echo $employee -> id ?>]"
                                                                value="<?php echo LEAVE_STATUS ?>"
-                                                               onclick="if_late_arrival(<?php echo $employee -> id ?>)">
+                                                               onclick="if_late_arrival(<?php echo $employee -> id ?>)"
+                                                            <?php echo ( !empty( $isOnLeave ) ) ? 'checked="checked"' : '' ?>>
                                                         <span>Leave</span>
                                                     </li>
                                                     <li>
@@ -72,7 +75,7 @@
                                             <td>
                                                 <textarea name="remarks[<?php echo $employee -> id ?>]"
                                                           class="form-control no-resize"
-                                                          rows="3"></textarea>
+                                                          rows="3"><?php echo !empty( $isOnLeave ) ? $isOnLeave -> description : '' ?></textarea>
                                             </td>
                                         </tr>
                                         <?php

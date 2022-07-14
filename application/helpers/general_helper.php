@@ -281,3 +281,76 @@
         $ci -> load -> model ( 'EmployeeModel' );
         return $ci -> EmployeeModel -> get_employee_by_id ( $employee_id );
     }
+    
+    /**
+     * ------------
+     * @param $employee_id
+     * @param $company_id
+     * @param $shift_id
+     * @return mixed
+     * is employee on leave
+     * ------------
+     */
+    
+    function is_employee_on_leave ( $employee_id, $company_id, $shift_id ) {
+        $ci = &get_instance ();
+        $ci -> load -> model ( 'LeaveModel' );
+        return $ci -> LeaveModel -> is_employee_on_leave ( $employee_id, $company_id, $shift_id );
+    }
+    
+    /**
+     * ------------
+     * @param $year
+     * @param $month
+     * @param false $ignore
+     * @return int
+     * count no of working days in a month
+     * ------------
+     */
+    
+    function countWorkingDays ( $year, $month, $ignore = array (
+        0,
+        6
+    ) ) {
+        $count = 0;
+        $counter = mktime ( 0, 0, 0, $month, 1, $year );
+        while ( date ( "n", $counter ) == $month ) {
+            if ( in_array ( date ( "w", $counter ), $ignore ) == false ) {
+                $count++;
+            }
+            $counter = strtotime ( "+1 day", $counter );
+        }
+        return $count;
+    }
+    
+    /**
+     * ------------
+     * @param $employee_id
+     * @param $date
+     * @param $status
+     * @return mixed
+     * get attendance count by date
+     * ------------
+     */
+    
+    function get_attendance_count_by_month_year ( $employee_id, $date, $status ) {
+        $ci = &get_instance ();
+        $ci -> load -> model ( 'AttendanceModel' );
+        return $ci -> AttendanceModel -> get_attendance_count_by_month_year ( $employee_id, $date, $status );
+    }
+    
+    /**
+     * ------------
+     * @param $employee_id
+     * @param $date
+     * @param $status
+     * @return mixed
+     * get attendance late arrivals count by date
+     * ------------
+     */
+    
+    function get_attendance_late_arrivals_count_by_month_year ( $employee_id, $date, $status ) {
+        $ci = &get_instance ();
+        $ci -> load -> model ( 'AttendanceModel' );
+        return $ci -> AttendanceModel -> get_attendance_late_arrivals_count_by_month_year ( $employee_id, $date, $status );
+    }

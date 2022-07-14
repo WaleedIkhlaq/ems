@@ -31,17 +31,33 @@
                 </ul>
             </li>
             
+            <li class="dropdown <?php echo ( $parent_uri == 'salaries' ) ? 'active' : '' ?>">
+                <a href="javascript:void(0)" class="menu-toggle nav-link has-dropdown">
+                    <i data-feather="dollar-sign"></i>
+                    <span>Salary Sheets</span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li class="<?php echo ( $parent_uri == 'salaries' and $child_uri == 'index' ) ? 'active' : '' ?>">
+                        <a class="nav-link" href="<?php echo base_url ( '/salaries/index' ) ?>">All Salary Sheets</a>
+                    </li>
+                    
+                    <li class="<?php echo ( $parent_uri == 'companies' and $child_uri == 'add' ) ? 'active' : '' ?>">
+                        <a class="nav-link" href="<?php echo base_url ( '/salaries/add' ) ?>">Add Salary Sheet</a>
+                    </li>
+                </ul>
+            </li>
+            
             <li class="dropdown <?php echo ( $parent_uri == 'companies' ) ? 'active' : '' ?>">
                 <a href="javascript:void(0)" class="menu-toggle nav-link has-dropdown">
                     <i data-feather="trello"></i>
                     <span>Companies</span>
                 </a>
                 <ul class="dropdown-menu">
-                    <li class="<?php echo ( $parent_uri == 'companies' and $child_uri == 'search' ) ? 'active' : '' ?>">
+                    <li class="<?php echo ( $parent_uri == 'companies' and $child_uri == 'index' ) ? 'active' : '' ?>">
                         <a class="nav-link" href="<?php echo base_url ( '/companies/index' ) ?>">All Companies</a>
                     </li>
                     
-                    <li class="<?php echo ( $parent_uri == 'companies' and $child_uri == 'search' ) ? 'active' : '' ?>">
+                    <li class="<?php echo ( $parent_uri == 'companies' and $child_uri == 'add' ) ? 'active' : '' ?>">
                         <a class="nav-link" href="<?php echo base_url ( '/companies/add' ) ?>">Add Company</a>
                     </li>
                 </ul>
@@ -53,11 +69,11 @@
                     <span>Employees</span>
                 </a>
                 <ul class="dropdown-menu">
-                    <li class="<?php echo ( $parent_uri == 'employees' and $child_uri == 'search' ) ? 'active' : '' ?>">
+                    <li class="<?php echo ( $parent_uri == 'employees' and $child_uri == 'index' ) ? 'active' : '' ?>">
                         <a class="nav-link" href="<?php echo base_url ( '/employees/index' ) ?>">All Employees</a>
                     </li>
                     
-                    <li class="<?php echo ( $parent_uri == 'employees' and $child_uri == 'search' ) ? 'active' : '' ?>">
+                    <li class="<?php echo ( $parent_uri == 'employees' and $child_uri == 'add' ) ? 'active' : '' ?>">
                         <a class="nav-link" href="<?php echo base_url ( '/employees/add' ) ?>">Add Employee</a>
                     </li>
                 </ul>

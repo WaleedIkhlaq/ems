@@ -122,7 +122,7 @@
                     }
                     
                     $this -> session -> set_flashdata ( 'response', 'Attendance has been marked.' );
-                    return redirect ( base_url ( '/attendance/index' ) );
+                    return redirect ( base_url ( '/attendance/edit/?id=' . encrypt_string ( $attendance_id ) ) );
                 }
             }
         }
@@ -146,6 +146,12 @@
             $this -> load -> view ( 'attendance/edit', $data );
             dashboard_footer ();
         }
+        
+        /**
+         * -----------------
+         * update marked attendance
+         * -----------------
+         */
         
         private function process_update_attendance () {
             $this -> form_validation -> set_rules ( 'attendances-id', 'attendance id', 'required|trim|xss_clean' );

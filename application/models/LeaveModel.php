@@ -131,5 +131,21 @@
             $this -> db -> delete ( 'employee_leaves', array ( 'id' => $id ) );
             return $this -> db -> affected_rows ();
         }
+    
+        /**
+         * ------------
+         * @param $employee_id
+         * @param $company_id
+         * @param $shift_id
+         * is employee on leave
+         * ------------
+         */
+        
+        public function is_employee_on_leave ( $employee_id, $company_id, $shift_id ) {
+            $date = date ( 'Y-m-d' );
+            
+            $data = $this -> db -> query ( "Select * from ems_employee_leaves where employee_id=$employee_id and company_id=$company_id and shift_id=$shift_id and ('{$date}' between DATE(start_date) and DATE(end_date))" );
+            return $data -> row ();
+        }
         
     }

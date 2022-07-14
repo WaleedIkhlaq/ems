@@ -115,4 +115,34 @@
             return $data -> result ();
         }
         
+        /**
+         * -----------------
+         * @param $employee_id
+         * @param $date
+         * @param $status
+         * @return mixed
+         * get attendance count of employee by month_year & status
+         * -----------------
+         */
+        
+        public function get_attendance_count_by_month_year ( $employee_id, $date, $status ) {
+            $sql = $this -> db -> query ( "Select COUNT(*) as totalRows from ems_attendance where status='$status' and employee_id=$employee_id and attendance_id IN (Select id from ems_attendances where DATE_FORMAT(attendance_date, '%Y-%m')='$date');" );
+            return $sql -> row () -> totalRows;
+        }
+        
+        /**
+         * -----------------
+         * @param $employee_id
+         * @param $date
+         * @param $status
+         * @return mixed
+         * get attendance late arrivals count of employee by month_year & status
+         * -----------------
+         */
+        
+        public function get_attendance_late_arrivals_count_by_month_year ( $employee_id, $date, $status ) {
+            $sql = $this -> db -> query ( "Select SUM(late_hours) as late_hours from ems_attendance where status='$status' and employee_id=$employee_id and attendance_id IN (Select id from ems_attendances where DATE_FORMAT(attendance_date, '%Y-%m')='$date');" );
+            return $sql -> row () -> late_hours;
+        }
+        
     }
